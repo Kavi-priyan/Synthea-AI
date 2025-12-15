@@ -1,0 +1,8 @@
+[2025-12-15 18:03:49,383] 22 INFO - Entered the data ingestion method or component
+[2025-12-15 18:03:49,408] 26 INFO - Read the dataset as dataframe
+[2025-12-15 18:03:49,424] 32 INFO - Train test split initiated
+[2025-12-15 18:03:49,424] 39 INFO - Ingestion of the data iss completed
+[2025-12-15 18:03:49,488] 33 INFO - Read train and test data is Completed
+[2025-12-15 18:03:49,488] 93 INFO - Pipeline completed
+[2025-12-15 18:03:49,488] 104 INFO - Transformer declared
+[2025-12-15 18:03:49,488] 41 INFO - Obtaining preprocessor Complete
