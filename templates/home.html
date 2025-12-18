@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Performance AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            overflow-x: hidden;
+        }
+
+        /* Ambient Background Animation */
+        .ambient-light {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: -1;
+            opacity: 0.6;
+            animation: float 10s infinite ease-in-out;
+        }
+        .light-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: #7c3aed; animation-delay: 0s; }
+        .light-2 { bottom: -10%; right: -10%; width: 600px; height: 600px; background: #2563eb; animation-delay: 2s; }
+        .light-3 { top: 40%; left: 40%; width: 300px; height: 300px; background: #ec4899; animation-delay: 4s; opacity: 0.4; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
+
+        /* Glassmorphism Card */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Custom Select Arrow Styling */
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.75rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+        }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex items-center justify-center p-4">
+
+    <div class="ambient-light light-1"></div>
+    <div class="ambient-light light-2"></div>
+    <div class="ambient-light light-3"></div>
+
+    <main class="w-full max-w-4xl">
+        <div class="glass-panel rounded-3xl p-8 md:p-12 transition-all duration-500 hover:shadow-[0_0_40px_-10px_rgba(124,58,237,0.3)]">
+            
+            <div class="mb-10 text-center">
+                <span class="inline-block py-1 px-3 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold tracking-wider uppercase mb-3 border border-indigo-500/30">
+                    AI Analysis Model v2.0
+                </span>
+                <h1 class="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-slate-400 mb-4">
+                    Performance Predictor
+                </h1>
+                <p class="text-slate-400 text-lg max-w-xl mx-auto">
+                    Enter student demographics and preliminary scores to forecast math performance using our machine learning engine.
+                </p>
+            </div>
+
+            <form action="{{ url_for('predict_datapoint')}}" method="post" class="space-y-8">
+                
+                <div class="space-y-6">
+                    <h2 class="text-sm uppercase tracking-widest text-slate-500 font-semibold border-b border-white/5 pb-2">Student Profile</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="group">
+                            <label class="block text-sm font-medium text-slate-300 mb-2 group-focus-within:text-indigo-400 transition-colors">Gender</label>
+                            <select class="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all hover:bg-slate-800/50" name="gender" required>
+                                <option value="" disabled selected>Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+
+                        <div class="group">
+                            <label class="block text-sm font-medium text-slate-300 mb-2 group-focus-within:text-indigo-400 transition-colors">Race or Ethnicity</label>
+                            <select class="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all hover:bg-slate-800/50" name="ethnicity" required>
+                                <option value="" disabled selected>Select Group</option>
+                                <option value="group A">Group A</option>
+                                <option value="group B">Group B</option>
+                                <option value="group C">Group C</option>
+                                <option value="group D">Group D</option>
+                                <option value="group E">Group E</option>
+                            </select>
+                        </div>
+
+                        <div class="group md:col-span-2">
+                            <label class="block text-sm font-medium text-slate-300 mb-2 group-focus-within:text-indigo-400 transition-colors">Parental Level of Education</label>
+                            <select class="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all hover:bg-slate-800/50" name="parental_level_of_education" required>
+                                <option value="" disabled selected>Select Education Level</option>
+                                <option value="associate's degree">Associate's Degree</option>
+                                <option value="bachelor's degree">Bachelor's Degree</option>
+                                <option value="high school">High School</option>
+                                <option value="master's degree">Master's Degree</option>
+                                <option value="some college">Some College</option>
+                                <option value="some high school">Some High School</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <h2 class="text-sm uppercase tracking-widest text-slate-500 font-semibold border-b border-white/5 pb-2">Environmental Factors</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="group">
+                            <label class="block text-sm font-medium text-slate-300 mb-2 group-focus-within:text-indigo-400 transition-colors">Lunch Type</label>
+                            <select class="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all hover:bg-slate-800/50" name="lunch" required>
+                                <option value="" disabled selected>Select Lunch Type</option>
+                                <option value="free/reduced">Free / Reduced</option>
+                                <option value="standard">Standard</option>
+                            </select>
+                        </div>
+
+                        <div class="group">
+                            <label class="block text-sm font-medium text-slate-300 mb-2 group-focus-within:text-indigo-400 transition-colors">Test Preparation Course</label>
+                            <select class="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all hover:bg-slate-800/50" name="test_preparation_course" required>
+                                <option value="" disabled selected>Select Status</option>
+                                <option value="none">None</option>
+                                <option value="completed">Completed</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <h2 class="text-sm uppercase tracking-widest text-slate-500 font-semibold border-b border-white/5 pb-2">Current Metrics</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="relative group">
+                            <label class="block text-sm font-medium text-slate-300 mb-2 group-focus-within:text-indigo-400 transition-colors">Writing Score (0-100)</label>
+                            <input class="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all placeholder-slate-600" 
+                                type="number" name="reading_score" placeholder="e.g. 72" min="0" max="100" required />
+                        </div>
+
+                        <div class="relative group">
+                            <label class="block text-sm font-medium text-slate-300 mb-2 group-focus-within:text-indigo-400 transition-colors">Reading Score (0-100)</label>
+                            <input class="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all placeholder-slate-600" 
+                                type="number" name="writing_score" placeholder="e.g. 85" min="0" max="100" required />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-6">
+                    <input class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold py-4 px-6 rounded-xl cursor-pointer transform hover:-translate-y-1 transition-all duration-200 shadow-[0_10px_20px_-10px_rgba(99,102,241,0.5)] active:scale-95" 
+                        type="submit" value="Predict Math Score" />
+                </div>
+            </form>
+
+            {% if results %}
+            <div class="mt-10 p-1 rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 animate-fade-in-up">
+                <div class="bg-slate-900 rounded-xl p-8 text-center">
+                    <h3 class="text-slate-400 text-sm uppercase tracking-widest font-semibold mb-2">Prediction Result</h3>
+                    <div class="text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-pink-400">
+                        {{results}}
+                    </div>
+                    <p class="text-slate-500 mt-2 text-sm">Estimated Math Performance</p>
+                </div>
+            </div>
+            {% endif %}
+            
+        </div>
+    </main>
+
+</body>
+</html>
