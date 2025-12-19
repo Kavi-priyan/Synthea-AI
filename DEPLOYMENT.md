@@ -32,10 +32,13 @@ Make sure your repository includes:
 4. Configure the service:
    - **Name**: ml-pipeline-app (or your preferred name)
    - **Environment**: Python 3
-   - **Build Command**: `pip install -r requirements.txt`
+   - **Python Version**: **IMPORTANT** - In the "Advanced" section, set Python version to **3.11.9** (or ensure `runtime.txt` is detected)
+   - **Build Command**: `pip install --upgrade pip setuptools wheel && pip install -r requirements.txt`
    - **Start Command**: `gunicorn app:app --bind 0.0.0.0:$PORT`
    - **Instance Type**: Free tier is fine for testing
 5. Click "Create Web Service"
+
+**⚠️ CRITICAL**: If you see pandas compilation errors, make sure Python 3.11.9 is selected (not 3.13). The `runtime.txt` file should handle this automatically, but you can verify in the service settings.
 
 #### Option B: Using render.yaml (Blueprints)
 
@@ -43,6 +46,8 @@ Make sure your repository includes:
 2. Click "New +" and select "Blueprint"
 3. Connect your GitHub repository
 4. Render will automatically detect `render.yaml` and configure the service
+
+**Note**: If you encounter Python version issues with Blueprints, you can temporarily delete `render.yaml` and use Option A instead. The `runtime.txt` and `Procfile` will be automatically detected.
 
 ### 3. Important Notes
 
@@ -67,9 +72,11 @@ Once deployed:
 
 - **Build Fails**: Check the build logs in Render dashboard. Common issues:
   - Missing dependencies in requirements.txt
-  - Python version mismatch (ensure `runtime.txt` specifies Python 3.11.9)
+  - **Python version mismatch**: This is the most common issue. Render may default to Python 3.13 which causes pandas compilation errors. 
+    - **Solution**: Go to your service settings → Environment → and manually set Python version to **3.11.9**
+    - Or ensure `runtime.txt` is in the root directory with `python-3.11.9`
   - Missing files (artifacts, templates)
-  - If you see pandas compilation errors, ensure Python 3.11 or 3.12 is used (not 3.13)
+  - If you see pandas/Cython compilation errors, it means Python 3.13 is being used. Switch to Python 3.11.9
 
 - **App Crashes**: Check the runtime logs:
   - Pipeline loading errors
