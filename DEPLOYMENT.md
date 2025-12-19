@@ -14,6 +14,7 @@ This guide will help you deploy this ML Pipeline application to Render.
 Make sure your repository includes:
 - ✅ `app.py` - Main Flask application
 - ✅ `requirements.txt` - Python dependencies
+- ✅ `runtime.txt` - Python version specification (Python 3.11.9)
 - ✅ `Procfile` - Process file for Render
 - ✅ `render.yaml` - Render configuration (optional)
 - ✅ `artifacts/` folder with:
@@ -49,6 +50,8 @@ Make sure your repository includes:
 
 - **Environment Variables**: No environment variables are required for basic deployment. The PORT is automatically set by Render.
 
+- **Python Version**: The project uses Python 3.11.9 (specified in `runtime.txt`). This ensures compatibility with all ML libraries.
+
 - **Build Time**: The first build may take 5-10 minutes as it installs all dependencies including ML libraries.
 
 - **Health Check**: The app includes a `/health` endpoint that you can use for monitoring.
@@ -64,8 +67,9 @@ Once deployed:
 
 - **Build Fails**: Check the build logs in Render dashboard. Common issues:
   - Missing dependencies in requirements.txt
-  - Python version mismatch
+  - Python version mismatch (ensure `runtime.txt` specifies Python 3.11.9)
   - Missing files (artifacts, templates)
+  - If you see pandas compilation errors, ensure Python 3.11 or 3.12 is used (not 3.13)
 
 - **App Crashes**: Check the runtime logs:
   - Pipeline loading errors
@@ -80,6 +84,7 @@ Once deployed:
 .
 ├── app.py                 # Main Flask application
 ├── requirements.txt       # Python dependencies
+├── runtime.txt           # Python version (3.11.9)
 ├── Procfile              # Process file for Render
 ├── render.yaml           # Render configuration (optional)
 ├── artifacts/            # Model and preprocessor files
