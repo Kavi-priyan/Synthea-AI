@@ -3,7 +3,7 @@ from flask import Flask, request, render_template
 from src.pipeline.predict_pipeline import CustomData, PredictPipeline
 import traceback
 
-app = Flask(__name__)
+application = Flask(__name__)
 
 # Load pipeline once
 pipeline = None
@@ -17,11 +17,11 @@ except Exception as e:
     print("✗ Error loading pipeline:", e)
     traceback.print_exc()
 
-@app.route("/")
+@application.route("/")
 def index():
     return render_template("index.html")
 
-@app.route("/health")
+@application.route("/health")
 def health():
     """Health check endpoint for Render"""
     import os
@@ -46,7 +46,7 @@ def health():
     
     return response, 200
 
-@app.route("/predict_datapoint", methods=["GET", "POST"])
+@application.route("/predict_datapoint", methods=["GET", "POST"])
 def predict_datapoint():
     try:
         if request.method == "GET":
@@ -73,4 +73,4 @@ def predict_datapoint():
 # Dynamic port for Render
 if __name__ == "__main__":
    
-    app.run(host="0.0.0.0") 
+   application.run(host="0.0.0.0") 
